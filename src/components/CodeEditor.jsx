@@ -41,7 +41,7 @@ const CodeEditor = () => {
     return (
         <Box>
             <HStack spacing={4}>
-                <Box w = "50%">
+                <Box w = "60%">
                     <LanguageSelector language={language} onSelect={onSelect} languages={languages}/>
                     <Editor
                         
