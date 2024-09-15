@@ -44,13 +44,19 @@ const CodeEditor = () => {
                 <Box w = "50%">
                     <LanguageSelector language={language} onSelect={onSelect} languages={languages}/>
                     <Editor
-                        zIndex={0}
+                        
                         height="75vh"
                         theme='vs-dark'
                         language={language}
                         defaultValue={CODE_SNIPPETS[language]}
                         onMount={onMount}
                         value={value}
+                        options={{
+                            fontFamily: "Fira Code, monospaced",
+                            fontSize: 15,
+                            fontLigatures: true, 
+                            lineHeight: 22,
+                        }}
                         onChange={
                             (value, ) => setValue(value)
                         }

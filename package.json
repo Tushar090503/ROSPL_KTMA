@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "homepage": "https://mayekarraj.github.io/iCodeEditor/",
-  "scripts": {  
+  "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
