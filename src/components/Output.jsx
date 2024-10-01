@@ -1,5 +1,4 @@
-// Output.jsx
-import { Box, Button, Text, useToast, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, Text, useToast, useColorModeValue, Input } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { executeCode } from '../api';
 
@@ -8,24 +7,27 @@ const Output = ({ editorRef, language }) => {
   const [output, setOutput] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [userInput, setUserInput] = useState(''); // To store user input before execution
 
-  const outputBackground = useColorModeValue('white', '#1e1e1e'); // Output box background
+  const outputBackground = useColorModeValue('white', '#1e1e1e');
   const textColor = useColorModeValue('gray.800', 'gray.100');
 
   const runCode = async () => {
-    const sourceCode = editorRef.current.getValue();
+    const sourceCode = editorRef.current.getValue(); // Get code from editor
+
     if (!sourceCode) return;
+
     try {
       setLoading(true);
-      const { run: result } = await executeCode(language, sourceCode);
+      const { run: result } = await executeCode(language, sourceCode, userInput); // Pass user input
+
       setOutput(result.output.split("\n"));
-      result.stderr ? setIsError(true) : setIsError(false);
+      setIsError(!!result.stderr);
     } catch (error) {
-      console.log(error);
       toast({
-        title: "An error occurred",
-        description: error.message || "Unable to run code",
-        status: "error",
+        title: 'An error occurred',
+        description: error.message || 'Unable to run the code',
+        status: 'error',
         duration: 6000,
         isClosable: true,
       });
@@ -36,9 +38,8 @@ const Output = ({ editorRef, language }) => {
 
   return (
     <Box w="40%">
-      <Text mb={2} fontSize="lg">
-        Output:
-      </Text>
+      <Text mb={2} fontSize="lg">Output:</Text>
+
       <Button
         variant="outline"
         colorScheme="green"
@@ -48,14 +49,25 @@ const Output = ({ editorRef, language }) => {
       >
         Run Code
       </Button>
+
+      <Input
+        placeholder="Enter input (if required)..."
+        value={userInput}
+        onChange={(e) => setUserInput(e.target.value)}
+        mb={4}
+      />
+
+      
+
       <Box
-        height="75vh"
+        height="67vh"
         p={2}
-        bg={outputBackground} // Background color based on theme
-        color={isError ? "red.500" : textColor} // Text color based on theme
+        bg={outputBackground}
+        color={isError ? 'red.500' : textColor}
         border="1px solid"
         borderRadius={4}
-        borderColor={isError ? "red.300" : "#333"}
+        borderColor={isError ? 'red.300' : '#333'}
+        overflowY="auto"
       >
         {output ? output.map((line, i) => (
           <Text key={i}>{line}</Text>
